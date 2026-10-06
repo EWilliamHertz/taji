@@ -23,17 +23,21 @@ export function Hero() {
       ref={ref}
       className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-zinc-950 pt-20"
     >
-      {/* Parallax Background Image */}
+      {/* Parallax Background Video */}
       <motion.div 
         style={{ y, opacity }}
         className="absolute inset-0 z-0"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-zinc-950 z-10" />
-        <img 
-          src="https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?q=80&w=2000&auto=format&fit=crop" 
-          alt="Taji Foodtruck" 
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
           className="w-full h-full object-cover object-center"
-        />
+        >
+          <source src="/video/hero.mp4" type="video/mp4" />
+        </video>
       </motion.div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col items-center text-center">

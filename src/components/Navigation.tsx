@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "./LanguageContext";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Logo } from "./Logo";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,11 +22,13 @@ export function Navigation() {
 
   const navLinks = [
     { name: t("navHome"), href: "#home" },
+    { name: t("navStory"), href: "#story" },
+    { name: t("navCatering"), href: "#catering" },
     { name: t("navGallery"), href: "#gallery" },
     { name: t("navLocation"), href: "#location" },
   ];
 
-  const langs: ("EN" | "SV" | "DE")[] = ["EN", "SV", "DE"];
+  const langs: ("EN" | "SV")[] = ["EN", "SV"];
 
   return (
     <motion.nav
@@ -41,11 +44,11 @@ export function Navigation() {
         {/* Logo */}
         <motion.a
           href="#home"
-          className="text-2xl font-black text-white tracking-tighter uppercase"
+          className="text-white hover:text-yellow-400 transition-colors w-24"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          Taji<span className="text-yellow-400">.</span>
+          <Logo className="w-full h-auto drop-shadow-md" />
         </motion.a>
 
         {/* Desktop Nav */}
