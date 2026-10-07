@@ -99,6 +99,30 @@ export async function toggleMenuItemSoldOut(id: number, is_sold_out: boolean) {
   revalidatePath("/admin");
 }
 
+export async function saveMenuItem(id: number | null, data: any) {
+  if (!(await checkAdmin())) throw new Error("Unauthorized");
+  if (id) {
+    await query(
+      "UPDATE menu_items SET title_en=$1, title_sv=$2, desc_en=$3, desc_sv=$4, price=$5, image=$6, additional_images=$7, tags=$8 WHERE id=$9",
+      [data.title_en, data.title_sv, data.desc_en, data.desc_sv, data.price, data.image, data.additional_images, data.tags, id]
+    );
+  } else {
+    await query(
+      "INSERT INTO menu_items (title_en, title_sv, desc_en, desc_sv, price, image, additional_images, tags) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+      [data.title_en, data.title_sv, data.desc_en, data.desc_sv, data.price, data.image, data.additional_images, data.tags]
+    );
+  }
+  revalidatePath("/");
+  revalidatePath("/admin");
+}
+
+export async function deleteMenuItem(id: number) {
+  if (!(await checkAdmin())) throw new Error("Unauthorized");
+  await query("DELETE FROM menu_items WHERE id = $1", [id]);
+  revalidatePath("/");
+  revalidatePath("/admin");
+}
+
 export async function getReviews() {
   const result = await query("SELECT * FROM reviews ORDER BY id DESC");
   return result.rows;
