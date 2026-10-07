@@ -71,7 +71,18 @@ export const translations: Translations = {
     EN: "Want Taji at your next event? We offer catering for corporate events, weddings, and private parties. Book our food truck to give your guests an unforgettable Pakistani street food experience.",
     SV: "Vill du ha Taji på ditt nästa event? Vi erbjuder catering för företagsevent, bröllop och privata fester. Boka vår foodtruck för att ge dina gäster en oförglömlig upplevelse av pakistansk streetfood."
   },
-  cateringCta: { EN: "Contact Us for Booking", SV: "Kontakta Oss för Bokning" }
+  cateringCta: { EN: "Contact Us for Booking", SV: "Kontakta Oss för Bokning" },
+  bookingFormTitle: { EN: "Book Our Truck", SV: "Boka Vår Truck" },
+  bookingSuccess: { EN: "Booking Confirmed! We'll be in touch soon.", SV: "Bokning bekräftad! Vi hör av oss snart." },
+  formSelectDate: { EN: "Select Date", SV: "Välj Datum" },
+  formSelectTime: { EN: "Select Time", SV: "Välj Tid" },
+  formName: { EN: "Name", SV: "Namn" },
+  formNamePlaceholder: { EN: "Your name", SV: "Ditt namn" },
+  formEmail: { EN: "Email", SV: "E-post" },
+  formEmailPlaceholder: { EN: "your@email.com", SV: "din@epost.se" },
+  formGuests: { EN: "Number of Guests", SV: "Antal Gäster" },
+  formSubmit: { EN: "Confirm Booking", SV: "Bekräfta Bokning" },
+  formProcessing: { EN: "Processing...", SV: "Bearbetar..." }
 };
 
 interface LanguageContextType {

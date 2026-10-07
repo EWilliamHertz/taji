@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useLanguage } from "./LanguageContext";
+import { BookingForm } from "./BookingForm";
 
 export function CateringBooking() {
   const { t } = useLanguage();
@@ -29,11 +30,13 @@ export function CateringBooking() {
           
           <a
             href="mailto:hello@taji.se"
-            className="inline-flex items-center justify-center px-8 py-4 bg-yellow-400 text-black font-bold uppercase tracking-wider rounded-full hover:scale-105 transition-transform shadow-[0_0_30px_rgba(250,204,21,0.3)]"
+            className="inline-flex items-center justify-center px-8 py-4 bg-yellow-400 text-black font-bold uppercase tracking-wider rounded-full hover:scale-105 transition-transform shadow-[0_0_30px_rgba(250,204,21,0.3)] mb-12"
           >
             {t("cateringCta")}
           </a>
         </motion.div>
+        
+        <BookingForm />
       </div>
     </section>
   );
