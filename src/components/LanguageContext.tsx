@@ -18,7 +18,7 @@ export const translations: Translations = {
   navCatering: { EN: "Catering", SV: "Catering" },
   heroSubtitle: {
     EN: "STREET FOOD REIMAGINED.",
-    SV: "GATUMAT OMDEFINIERAD.",
+    SV: "Pakistansk Streetfood när det är som bäst!",
   },
   heroCta: { EN: "Find Us Today", SV: "Hitta Oss Idag" },
   galleryTitle: {
@@ -59,8 +59,8 @@ export const translations: Translations = {
     SV: "Ganska kort efter att vi startade foodtrucken insåg vi att vi ville satsa fullt ut på konceptet. Vi tog ledigt från våra arbeten och andra åtaganden och valde att satsa på Taji på riktigt. Idag arbetar vi heltid med Taji och har drivit verksamheten i två år med vår vita foodtruck.",
   },
   storyP5: {
-    EN: "The name Taji is very personal to us—it's created from our two children, Taria and Jibril (Ta + Ji = Taji). I have my roots in Pakistan, and my wife has hers in Bulgaria. Together, we've built Taji as a meeting point between our cultures, our family, and our love for food.",
-    SV: "Namnet Taji har dessutom en väldigt personlig betydelse för oss. Det är skapat utifrån våra två barn, Taria och Jibril – Ta + Ji = Taji. Jag har mina rötter i Pakistan och min fru har sina rötter i Bulgarien. Tillsammans har vi skapat Taji som en mötesplats mellan våra kulturer, vår familj och vår kärlek till mat.",
+    EN: "The name Taji is very personal to us—it's created from our two children, Taria and Jibril (Ta + Ji = Taji). I have my roots in Pakistan, and my wife has hers in Bulgaria. Together, we've built Taji as a meeting point between our cultures, our family, and our love for food. // Bilal",
+    SV: "Namnet Taji har dessutom en väldigt personlig betydelse för oss. Det är skapat utifrån våra två barn, Taria och Jibril – Ta + Ji = Taji. Jag har mina rötter i Pakistan och min fru har sina rötter i Bulgarien. Tillsammans har vi skapat Taji som en mötesplats mellan våra kulturer, vår familj och vår kärlek till mat. // Bilal",
   },
   storyAmbition: {
     EN: "Our ambition is simple: To take our guests on a taste journey through Pakistan – served our way.",
