@@ -71,6 +71,12 @@ export function MenuSection({ menuItems }: { menuItems: any[] }) {
             const desc = lang === "SV" ? item.desc_sv : item.desc_en;
             const tags = item.tags ? item.tags.split(',') : [];
 
+            const formatPrice = (price: string) => {
+              if (!price) return "";
+              if (price.toLowerCase().includes("kr") || price.toLowerCase().includes("sek")) return price;
+              return `${price} kr`;
+            };
+
             return (
               <motion.div
                 key={item.id}
@@ -101,7 +107,7 @@ export function MenuSection({ menuItems }: { menuItems: any[] }) {
                     <h3 className="text-xl font-bold text-white uppercase tracking-wide">
                       {title}
                     </h3>
-                    <span className="text-yellow-400 font-black">{item.price}</span>
+                    <span className="text-yellow-400 font-black">{formatPrice(item.price)}</span>
                   </div>
                   <p className="text-white/60 mb-6 text-sm leading-relaxed line-clamp-3">
                     {desc}
@@ -136,6 +142,12 @@ export function MenuSection({ menuItems }: { menuItems: any[] }) {
               const desc = lang === "SV" ? item.desc_sv : item.desc_en;
               const imgs = getImages(item);
               const tags = item.tags ? item.tags.split(',') : [];
+
+              const formatPrice = (price: string) => {
+                if (!price) return "";
+                if (price.toLowerCase().includes("kr") || price.toLowerCase().includes("sek")) return price;
+                return `${price} kr`;
+              };
 
               return (
                 <motion.div
@@ -201,7 +213,7 @@ export function MenuSection({ menuItems }: { menuItems: any[] }) {
                       <h3 className="text-3xl font-black text-white uppercase tracking-wide pr-8">
                         {title}
                       </h3>
-                      <span className="text-yellow-400 font-black text-xl whitespace-nowrap">{item.price}</span>
+                      <span className="text-yellow-400 font-black text-xl whitespace-nowrap">{formatPrice(item.price)}</span>
                     </div>
                     
                     <div className="flex flex-wrap gap-2 mb-8">
