@@ -2,16 +2,14 @@
 
 import { motion } from "framer-motion";
 import { useLanguage } from "./LanguageContext";
-import { Camera, Globe, MessageCircle, Mail } from "lucide-react";
+import { Instagram, Mail } from "lucide-react";
 
 export function Footer() {
   const { t } = useLanguage();
 
   const socialLinks = [
-    { icon: Camera, href: "#" },
-    { icon: Globe, href: "#" },
-    { icon: MessageCircle, href: "#" },
-    { icon: Mail, href: "#" },
+    { icon: Instagram, href: "https://www.instagram.com/tajifoodtruck/" },
+    { icon: Mail, href: "mailto:hello@tajifoodtruck.se" },
   ];
 
   return (

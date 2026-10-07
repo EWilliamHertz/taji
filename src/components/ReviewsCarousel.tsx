@@ -51,6 +51,35 @@ export function ReviewsCarousel({ reviews }: { reviews: any[] }) {
             );
           })}
         </div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-12 text-center"
+        >
+          <p className="text-white/60 mb-6 font-bold uppercase tracking-widest text-sm">
+            {lang === "SV" ? "Läs fler recensioner & Beställ via" : "Read more reviews & Order on"}
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a 
+              href="https://www.ubereats.com/se-en/store/tajis-foodtruck/Wikbd-sLX_2p-Q5ERuiPcg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#06C167] text-white px-8 py-3 rounded-full font-black uppercase tracking-wider hover:scale-105 transition-transform"
+            >
+              UberEats
+            </a>
+            <a 
+              href="https://wolt.com/sv/swe/stockholm/restaurant/tajis-foodtruck-2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#009de0] text-white px-8 py-3 rounded-full font-black uppercase tracking-wider hover:scale-105 transition-transform"
+            >
+              Wolt
+            </a>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
