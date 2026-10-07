@@ -10,7 +10,7 @@ export function Footer() {
 
   const socialLinks = [
     { icon: Camera, href: "https://www.instagram.com/tajifoodtruck/" },
-    { icon: Mail, href: "mailto:hello@tajifoodtruck.se" },
+    { icon: Mail, href: "mailto:tajisfoodtruck@gmail.com" },
   ];
 
   return (
