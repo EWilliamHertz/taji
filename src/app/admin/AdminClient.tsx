@@ -222,22 +222,6 @@ export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolea
           ))}
         </div>
       </section>
-
-      <section className="bg-[#111] p-6 rounded-xl border border-white/10">
-        <h2 className="text-2xl font-bold mb-6 text-yellow-400">Newsletter Subscribers</h2>
-        <div className="bg-white/5 p-4 rounded-lg">
-          <div className="font-bold mb-4">Total Subscribers: {subscribers.length}</div>
-          <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
-            {subscribers.map(sub => (
-              <div key={sub.id} className="flex justify-between border-b border-white/10 pb-2">
-                <span>{sub.email}</span>
-                <span className="text-white/50 text-sm">{new Date(sub.created_at).toLocaleDateString()}</span>
-              </div>
-            ))}
-            {subscribers.length === 0 && <div className="text-white/50">No subscribers yet.</div>}
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
