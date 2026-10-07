@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "./LanguageContext";
 import { Camera, Mail } from "lucide-react";
+import { Logo } from "./Logo";
 
 export function Footer() {
   const { t } = useLanguage();
@@ -21,9 +22,9 @@ export function Footer() {
           viewport={{ once: true }}
           className="text-center md:text-left"
         >
-          <span className="text-4xl font-black text-white tracking-tighter uppercase mb-4 block">
-            Taji<span className="text-yellow-400">.</span>
-          </span>
+          <div className="mb-4 flex justify-center md:justify-start">
+            <Logo className="w-24 h-auto opacity-80" />
+          </div>
           <div className="text-white/40 text-sm font-medium">
             © {new Date().getFullYear()} {t("footerText")}
           </div>
