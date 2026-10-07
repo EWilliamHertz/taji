@@ -13,7 +13,6 @@ const availableTimes = ["12:00", "13:00", "14:00", "15:00", "18:00", "19:00", "2
 
 export function BookingForm() {
   const { lang, t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<"catering" | "preorder">("catering");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [existingBookings, setExistingBookings] = useState<{date: string, time: string}[]>([]);
@@ -32,7 +31,7 @@ export function BookingForm() {
     const formData = new FormData(e.currentTarget);
     formData.set("date", format(selectedDate, "yyyy-MM-dd"));
     formData.set("time", selectedTime);
-    formData.set("type", activeTab);
+    formData.set("type", "catering");
 
     try {
       await createBooking(formData);
@@ -64,26 +63,6 @@ export function BookingForm() {
         <h3 className="text-3xl font-black uppercase text-white">
           {t("bookingFormTitle")}
         </h3>
-        <div className="flex bg-white/5 p-1 rounded-lg">
-          <button
-            type="button"
-            onClick={() => setActiveTab("catering")}
-            className={`px-4 py-2 rounded-md font-bold text-sm transition-colors ${
-              activeTab === "catering" ? "bg-yellow-400 text-black" : "text-white/70 hover:text-white"
-            }`}
-          >
-            {t("tabCatering")}
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("preorder")}
-            className={`px-4 py-2 rounded-md font-bold text-sm transition-colors ${
-              activeTab === "preorder" ? "bg-yellow-400 text-black" : "text-white/70 hover:text-white"
-            }`}
-          >
-            {t("tabPreorder")}
-          </button>
-        </div>
       </div>
 
       {successMessage && (
@@ -147,12 +126,10 @@ export function BookingForm() {
             <input required name="phone" type="tel" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors" placeholder={t("formPhonePlaceholder")} />
           </div>
           
-          {activeTab === "catering" && (
-            <div>
-              <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formGuests")}</label>
-              <input required name="guests" type="number" min="1" max="1000" defaultValue="50" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors" />
-            </div>
-          )}
+          <div>
+            <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formGuests")}</label>
+            <input required name="guests" type="number" min="1" max="1000" defaultValue="50" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors" />
+          </div>
 
           <div>
             <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formDetails")}</label>
@@ -160,7 +137,7 @@ export function BookingForm() {
               name="details" 
               rows={3} 
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors resize-none" 
-              placeholder={activeTab === "catering" ? t("formDetailsCateringPlaceholder") : t("formDetailsPreorderPlaceholder")} 
+              placeholder={t("formDetailsCateringPlaceholder")} 
             />
           </div>
 
