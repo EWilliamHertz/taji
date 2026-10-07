@@ -13,7 +13,8 @@ export function MenuSection({ menuItems }: { menuItems: any[] }) {
 
   const getImages = (item: any) => {
     if (!item) return [];
-    const imgs = [item.image];
+    const imgs = [];
+    if (item.image) imgs.push(item.image);
     if (item.additional_images) {
       imgs.push(...item.additional_images.split(',').map((u: string) => u.trim()).filter((u: string) => u));
     }
@@ -80,19 +81,21 @@ export function MenuSection({ menuItems }: { menuItems: any[] }) {
                 onClick={() => openModal(item)}
                 className={`bg-[#111] border border-white/5 rounded-2xl overflow-hidden transition-colors group relative cursor-pointer ${item.is_sold_out ? 'opacity-70 grayscale' : 'hover:border-yellow-400/50'}`}
               >
-                <div className="relative h-64 w-full overflow-hidden">
-                  <Image 
-                    src={item.image}
-                    alt={title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {item.is_sold_out && (
-                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                      <span className="bg-red-600 text-white font-black px-4 py-2 rounded uppercase tracking-widest rotate-[-10deg] text-xl border-2 border-red-500">Sold Out</span>
-                    </div>
-                  )}
-                </div>
+                {item.image && (
+                  <div className="relative h-64 w-full overflow-hidden bg-black">
+                    <Image 
+                      src={item.image}
+                      alt={title || "Menu item"}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    {item.is_sold_out && (
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <span className="bg-red-600 text-white font-black px-4 py-2 rounded uppercase tracking-widest rotate-[-10deg] text-xl border-2 border-red-500">Sold Out</span>
+                      </div>
+                    )}
+                  </div>
+                )}
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-xl font-bold text-white uppercase tracking-wide">
@@ -150,48 +153,50 @@ export function MenuSection({ menuItems }: { menuItems: any[] }) {
                   </button>
 
                   {/* Image Gallery Side */}
-                  <div className="w-full md:w-1/2 relative bg-black aspect-square md:aspect-auto">
-                    {imgs.map((src, idx) => (
-                      <div 
-                        key={idx}
-                        className={`absolute inset-0 transition-opacity duration-500 ${idx === currentImageIndex ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
-                      >
-                        <Image src={src} alt={title} fill className="object-cover" />
-                      </div>
-                    ))}
-                    
-                    {imgs.length > 1 && (
-                      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-4 z-10">
-                        <button 
-                          onClick={(e) => handlePrevImage(e, imgs)}
-                          className="bg-black/50 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-colors"
+                  {imgs.length > 0 && (
+                    <div className="w-full md:w-1/2 relative bg-black aspect-square md:aspect-auto">
+                      {imgs.map((src, idx) => (
+                        <div 
+                          key={idx}
+                          className={`absolute inset-0 transition-opacity duration-500 ${idx === currentImageIndex ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
                         >
-                          <ChevronLeft size={24} />
-                        </button>
-                        <button 
-                          onClick={(e) => handleNextImage(e, imgs)}
-                          className="bg-black/50 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-colors"
-                        >
-                          <ChevronRight size={24} />
-                        </button>
-                      </div>
-                    )}
+                          <Image src={src} alt={title || "Menu item"} fill className="object-cover" />
+                        </div>
+                      ))}
+                      
+                      {imgs.length > 1 && (
+                        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-4 z-10">
+                          <button 
+                            onClick={(e) => handlePrevImage(e, imgs)}
+                            className="bg-black/50 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-colors"
+                          >
+                            <ChevronLeft size={24} />
+                          </button>
+                          <button 
+                            onClick={(e) => handleNextImage(e, imgs)}
+                            className="bg-black/50 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-colors"
+                          >
+                            <ChevronRight size={24} />
+                          </button>
+                        </div>
+                      )}
 
-                    {/* Dots */}
-                    {imgs.length > 1 && (
-                      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
-                        {imgs.map((_, idx) => (
-                          <div 
-                            key={idx} 
-                            className={`w-2 h-2 rounded-full transition-colors ${idx === currentImageIndex ? 'bg-yellow-400' : 'bg-white/50'}`}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                      {/* Dots */}
+                      {imgs.length > 1 && (
+                        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
+                          {imgs.map((_, idx) => (
+                            <div 
+                              key={idx} 
+                              className={`w-2 h-2 rounded-full transition-colors ${idx === currentImageIndex ? 'bg-yellow-400' : 'bg-white/50'}`}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Content Side */}
-                  <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto">
+                  <div className={`w-full ${imgs.length > 0 ? 'md:w-1/2' : ''} p-8 md:p-12 overflow-y-auto`}>
                     <div className="flex justify-between items-start mb-6">
                       <h3 className="text-3xl font-black text-white uppercase tracking-wide pr-8">
                         {title}

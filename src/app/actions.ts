@@ -2,6 +2,8 @@
 
 import { query } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { put } from "@vercel/blob";
 
 export async function getBookings() {
   const result = await query("SELECT id, date, time FROM bookings");
@@ -143,5 +145,15 @@ export async function getSubscribers() {
   if (!(await checkAdmin())) throw new Error("Unauthorized");
   const result = await query("SELECT * FROM subscribers ORDER BY created_at DESC");
   return result.rows;
+}
+
+export async function uploadImage(formData: FormData) {
+  if (!(await checkAdmin())) throw new Error("Unauthorized");
+  const file = formData.get("file") as File;
+  if (!file) throw new Error("No file provided");
+  const blob = await put(`menu/${file.name}`, file, {
+    access: "public",
+  });
+  return blob.url;
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { loginAdmin, logoutAdmin, getAdminBookings, updateBookingStatus, getSchedule, updateSchedule, getMenuItems, toggleMenuItemSoldOut, saveMenuItem, deleteMenuItem } from "@/app/actions";
+import { loginAdmin, logoutAdmin, getAdminBookings, updateBookingStatus, getSchedule, updateSchedule, getMenuItems, toggleMenuItemSoldOut, saveMenuItem, deleteMenuItem, uploadImage } from "@/app/actions";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -59,6 +59,32 @@ export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolea
     setLoading(true);
     await updateSchedule(schedule);
     alert("Schedule saved!");
+    setLoading(false);
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, isAdditional: boolean) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    setLoading(true);
+    
+    try {
+      const urls = [];
+      for (let i = 0; i < e.target.files.length; i++) {
+        const formData = new FormData();
+        formData.append("file", e.target.files[i]);
+        const url = await uploadImage(formData);
+        urls.push(url);
+      }
+      
+      if (isAdditional) {
+        const current = editingMenuItem.additional_images ? editingMenuItem.additional_images + ", " : "";
+        setEditingMenuItem({ ...editingMenuItem, additional_images: current + urls.join(", ") });
+      } else {
+        setEditingMenuItem({ ...editingMenuItem, image: urls[0] });
+      }
+    } catch (err) {
+      alert("Upload failed. Make sure BLOB_READ_WRITE_TOKEN is set.");
+    }
+    
     setLoading(false);
   };
 
@@ -209,8 +235,8 @@ export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolea
           {menuItems.map(item => (
             <div key={item.id} className="flex flex-col sm:flex-row justify-between sm:items-center bg-white/5 p-4 rounded-lg gap-4">
               <div>
-                <div className="font-bold text-lg">{item.title_en}</div>
-                <div className="text-sm text-white/50">{item.price} • {item.tags}</div>
+                <div className="font-bold text-lg">{item.title_en || 'Untitled'}</div>
+                <div className="text-sm text-white/50">{item.price} {item.tags ? `• ${item.tags}` : ''}</div>
               </div>
               <div className="flex items-center gap-4">
                 <label className="flex items-center gap-2 cursor-pointer mr-4">
@@ -251,21 +277,39 @@ export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolea
               setLoading(false);
             }} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div><label className="text-sm text-white/50 block">Title (EN)</label><input required className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.title_en} onChange={e => setEditingMenuItem({...editingMenuItem, title_en: e.target.value})} /></div>
-                <div><label className="text-sm text-white/50 block">Title (SV)</label><input required className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.title_sv} onChange={e => setEditingMenuItem({...editingMenuItem, title_sv: e.target.value})} /></div>
-                <div><label className="text-sm text-white/50 block">Desc (EN)</label><textarea required rows={3} className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.desc_en} onChange={e => setEditingMenuItem({...editingMenuItem, desc_en: e.target.value})} /></div>
-                <div><label className="text-sm text-white/50 block">Desc (SV)</label><textarea required rows={3} className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.desc_sv} onChange={e => setEditingMenuItem({...editingMenuItem, desc_sv: e.target.value})} /></div>
+                <div><label className="text-sm text-white/50 block">Title (EN) - Optional</label><input className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.title_en || ""} onChange={e => setEditingMenuItem({...editingMenuItem, title_en: e.target.value})} /></div>
+                <div><label className="text-sm text-white/50 block">Title (SV) - Optional</label><input className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.title_sv || ""} onChange={e => setEditingMenuItem({...editingMenuItem, title_sv: e.target.value})} /></div>
+                <div><label className="text-sm text-white/50 block">Desc (EN) - Optional</label><textarea rows={3} className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.desc_en || ""} onChange={e => setEditingMenuItem({...editingMenuItem, desc_en: e.target.value})} /></div>
+                <div><label className="text-sm text-white/50 block">Desc (SV) - Optional</label><textarea rows={3} className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.desc_sv || ""} onChange={e => setEditingMenuItem({...editingMenuItem, desc_sv: e.target.value})} /></div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div><label className="text-sm text-white/50 block">Price</label><input required className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.price} onChange={e => setEditingMenuItem({...editingMenuItem, price: e.target.value})} /></div>
-                <div><label className="text-sm text-white/50 block">Tags (comma separated)</label><input className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.tags || ""} onChange={e => setEditingMenuItem({...editingMenuItem, tags: e.target.value})} /></div>
+                <div><label className="text-sm text-white/50 block">Price - Optional</label><input className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.price || ""} onChange={e => setEditingMenuItem({...editingMenuItem, price: e.target.value})} /></div>
+                <div><label className="text-sm text-white/50 block">Tags (comma separated) - Optional</label><input className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.tags || ""} onChange={e => setEditingMenuItem({...editingMenuItem, tags: e.target.value})} /></div>
               </div>
-              <div><label className="text-sm text-white/50 block">Primary Image URL (/images/... or http...)</label><input required className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.image} onChange={e => setEditingMenuItem({...editingMenuItem, image: e.target.value})} /></div>
-              <div><label className="text-sm text-white/50 block">Additional Images (comma separated URLs)</label><input className="w-full bg-white/5 border border-white/10 p-2 rounded" value={editingMenuItem.additional_images || ""} onChange={e => setEditingMenuItem({...editingMenuItem, additional_images: e.target.value})} /></div>
+              <div>
+                <label className="text-sm text-white/50 block">Primary Image URL - Optional</label>
+                <div className="flex gap-2">
+                  <input className="w-full bg-white/5 border border-white/10 p-2 rounded flex-1" value={editingMenuItem.image || ""} onChange={e => setEditingMenuItem({...editingMenuItem, image: e.target.value})} placeholder="URL will appear here after upload" />
+                  <label className="bg-white/10 hover:bg-white/20 px-4 py-2 rounded cursor-pointer font-bold whitespace-nowrap">
+                    Upload
+                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, false)} />
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label className="text-sm text-white/50 block">Additional Images (comma separated URLs) - Optional</label>
+                <div className="flex gap-2">
+                  <input className="w-full bg-white/5 border border-white/10 p-2 rounded flex-1" value={editingMenuItem.additional_images || ""} onChange={e => setEditingMenuItem({...editingMenuItem, additional_images: e.target.value})} placeholder="URLs will appear here after upload" />
+                  <label className="bg-white/10 hover:bg-white/20 px-4 py-2 rounded cursor-pointer font-bold whitespace-nowrap">
+                    Upload More
+                    <input type="file" multiple className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, true)} />
+                  </label>
+                </div>
+              </div>
               
               <div className="flex gap-4 justify-end mt-6">
                 <button type="button" onClick={() => setEditingMenuItem(null)} className="px-4 py-2 hover:bg-white/10 rounded">Cancel</button>
-                <button type="submit" disabled={loading} className="bg-yellow-400 text-black px-4 py-2 rounded font-bold">{loading ? "Saving..." : "Save"}</button>
+                <button type="submit" disabled={loading} className="bg-yellow-400 text-black px-4 py-2 rounded font-bold">{loading ? "Saving/Uploading..." : "Save"}</button>
               </div>
             </form>
           </div>
