@@ -26,3 +26,26 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #eab308;
 }
+
+/* React Day Picker Dark Theme Overrides */
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #facc15; /* yellow-400 */
+  --rdp-background-color: rgba(255, 255, 255, 0.1);
+  --rdp-accent-color-dark: #eab308; /* yellow-500 */
+  --rdp-background-color-dark: rgba(255, 255, 255, 0.2);
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  --rdp-outline-selected: 2px solid var(--rdp-accent-color);
+  margin: 0 !important;
+}
+
+.rdp-day_selected {
+  color: #000 !important;
+  font-weight: bold;
+}
+.rdp-day_selected:hover {
+  background-color: var(--rdp-accent-color-dark) !important;
+}
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: var(--rdp-background-color);
+}

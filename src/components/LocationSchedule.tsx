@@ -4,17 +4,10 @@ import { motion } from "framer-motion";
 import { useLanguage } from "./LanguageContext";
 import { MapPin, Clock } from "lucide-react";
 
-const scheduleData = [
-  { day: "Monday", location: "Downtown Square", time: "11:00 - 15:00" },
-  { day: "Tuesday", location: "Tech Park", time: "11:30 - 14:30" },
-  { day: "Wednesday", location: "University Campus", time: "12:00 - 16:00" },
-  { day: "Thursday", location: "Central Station", time: "11:00 - 19:00" },
-  { day: "Friday", location: "Festival Grounds", time: "12:00 - 22:00" },
-  { day: "Saturday", location: "Weekend Market", time: "10:00 - 18:00" },
-];
-
-export function LocationSchedule() {
+export function LocationSchedule({ scheduleData }: { scheduleData: any[] }) {
   const { t } = useLanguage();
+
+  const activeDays = scheduleData.filter(d => d.is_active);
 
   return (
     <section id="location" className="py-24 bg-yellow-400 relative">
@@ -40,9 +33,14 @@ export function LocationSchedule() {
         </div>
 
         <div className="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-black/20 before:to-transparent">
-          {scheduleData.map((item, index) => (
+          {activeDays.length === 0 && (
+            <div className="text-center text-black font-bold uppercase p-8 bg-black/10 rounded-2xl">
+              No schedule available yet. Check back soon!
+            </div>
+          )}
+          {activeDays.map((item, index) => (
             <motion.div
-              key={item.day}
+              key={item.day_of_week}
               initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-50px" }}
@@ -58,15 +56,15 @@ export function LocationSchedule() {
               <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-black rounded-2xl shadow-2xl hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] transition-shadow">
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
                   <h3 className="font-black text-white text-xl uppercase tracking-wide">
-                    {item.day}
+                    {item.day_of_week}
                   </h3>
                   <div className="flex items-center text-yellow-400 text-sm font-bold mt-2 md:mt-0">
                     <Clock size={14} className="mr-1" />
-                    {item.time}
+                    {item.time_range}
                   </div>
                 </div>
                 <p className="text-zinc-400 font-medium">
-                  {item.location}
+                  {item.location_name}
                 </p>
               </div>
             </motion.div>

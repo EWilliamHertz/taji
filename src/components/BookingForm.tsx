@@ -12,6 +12,7 @@ const availableTimes = ["12:00", "13:00", "14:00", "15:00", "18:00", "19:00", "2
 
 export function BookingForm() {
   const { lang, t } = useLanguage();
+  const [activeTab, setActiveTab] = useState<"catering" | "preorder">("catering");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [existingBookings, setExistingBookings] = useState<{date: string, time: string}[]>([]);
@@ -30,6 +31,7 @@ export function BookingForm() {
     const formData = new FormData(e.currentTarget);
     formData.set("date", format(selectedDate, "yyyy-MM-dd"));
     formData.set("time", selectedTime);
+    formData.set("type", activeTab);
 
     try {
       await createBooking(formData);
@@ -57,9 +59,32 @@ export function BookingForm() {
 
   return (
     <div className="bg-[#111] p-8 rounded-2xl shadow-2xl border border-white/5 w-full max-w-4xl mx-auto mt-12 text-left">
-      <h3 className="text-3xl font-black uppercase text-white mb-6">
-        {t("bookingFormTitle")}
-      </h3>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <h3 className="text-3xl font-black uppercase text-white">
+          {t("bookingFormTitle")}
+        </h3>
+        <div className="flex bg-white/5 p-1 rounded-lg">
+          <button
+            type="button"
+            onClick={() => setActiveTab("catering")}
+            className={`px-4 py-2 rounded-md font-bold text-sm transition-colors ${
+              activeTab === "catering" ? "bg-yellow-400 text-black" : "text-white/70 hover:text-white"
+            }`}
+          >
+            {t("tabCatering")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("preorder")}
+            className={`px-4 py-2 rounded-md font-bold text-sm transition-colors ${
+              activeTab === "preorder" ? "bg-yellow-400 text-black" : "text-white/70 hover:text-white"
+            }`}
+          >
+            {t("tabPreorder")}
+          </button>
+        </div>
+      </div>
+
       {successMessage && (
         <div className="bg-[#115740] text-white p-4 rounded-lg mb-6 font-bold">
           {successMessage}
@@ -70,7 +95,7 @@ export function BookingForm() {
         <div>
           <div className="mb-6">
             <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formSelectDate")}</label>
-            <div className="bg-white text-black p-4 rounded-xl inline-block">
+            <div className="bg-white/5 border border-white/10 text-white p-4 rounded-xl inline-block shadow-inner">
               <DayPicker 
                 mode="single"
                 selected={selectedDate}
@@ -116,14 +141,28 @@ export function BookingForm() {
             <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formEmail")}</label>
             <input required name="email" type="email" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors" placeholder={t("formEmailPlaceholder")} />
           </div>
+          
+          {activeTab === "catering" && (
+            <div>
+              <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formGuests")}</label>
+              <input required name="guests" type="number" min="1" max="1000" defaultValue="50" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors" />
+            </div>
+          )}
+
           <div>
-            <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formGuests")}</label>
-            <input required name="guests" type="number" min="1" max="100" defaultValue="1" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors" />
+            <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formDetails")}</label>
+            <textarea 
+              name="details" 
+              rows={3} 
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors resize-none" 
+              placeholder={activeTab === "catering" ? t("formDetailsCateringPlaceholder") : t("formDetailsPreorderPlaceholder")} 
+            />
           </div>
+
           <button 
             type="submit" 
             disabled={!selectedDate || !selectedTime || isSubmitting}
-            className="w-full bg-yellow-400 text-black font-black uppercase tracking-widest py-4 rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:hover:scale-100"
+            className="w-full bg-yellow-400 text-black font-black uppercase tracking-widest py-4 rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:hover:scale-100 mt-2"
           >
             {isSubmitting ? t("formProcessing") : t("formSubmit")}
           </button>

@@ -21,7 +21,7 @@ export function Hero() {
     <section 
       id="home" 
       ref={ref}
-      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-zinc-950 pt-20"
+      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-zinc-950 pt-32"
     >
       {/* Parallax Background Video */}
       <motion.div 

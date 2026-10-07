@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 
-export function Navigation() {
+export function Navigation({ locationText }: { locationText?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { lang, setLang, t } = useLanguage();
@@ -23,12 +23,14 @@ export function Navigation() {
   const navLinks = [
     { name: t("navHome"), href: "#home" },
     { name: t("navStory"), href: "#story" },
+    { name: t("menuTitle"), href: "#menu" },
     { name: t("navCatering"), href: "#catering" },
     { name: t("navGallery"), href: "#gallery" },
     { name: t("navLocation"), href: "#location" },
   ];
 
   const langs: ("EN" | "SV")[] = ["EN", "SV"];
+  const prefix = lang === "SV" ? "📍 Dagens Plats:" : "📍 Today's Location:";
 
   return (
     <motion.nav
@@ -37,9 +39,17 @@ export function Navigation() {
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-colors duration-300",
-        scrolled ? "bg-black/80 backdrop-blur-md shadow-lg" : "bg-transparent"
+        scrolled ? "bg-black/90 backdrop-blur-md shadow-lg" : "bg-transparent"
       )}
     >
+      {locationText && (
+        <div className="bg-yellow-400 text-black py-2 px-4 text-center text-sm sm:text-base font-bold tracking-wide">
+          <a href="#location" className="hover:underline flex items-center justify-center gap-2">
+            {prefix} {locationText}
+          </a>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo */}
         <motion.a

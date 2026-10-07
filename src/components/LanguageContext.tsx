@@ -82,7 +82,21 @@ export const translations: Translations = {
   formEmailPlaceholder: { EN: "your@email.com", SV: "din@epost.se" },
   formGuests: { EN: "Number of Guests", SV: "Antal Gäster" },
   formSubmit: { EN: "Confirm Booking", SV: "Bekräfta Bokning" },
-  formProcessing: { EN: "Processing...", SV: "Bearbetar..." }
+  formProcessing: { EN: "Processing...", SV: "Bearbetar..." },
+  tabCatering: { EN: "Catering Event", SV: "Catering Event" },
+  tabPreorder: { EN: "Pre-order Pickup", SV: "Förbeställning (Pickup)" },
+  formDetails: { EN: "Additional Details", SV: "Övriga detaljer" },
+  formDetailsCateringPlaceholder: { EN: "Event type, address, dietary requirements...", SV: "Eventtyp, adress, specialkost..." },
+  formDetailsPreorderPlaceholder: { EN: "What would you like to order?", SV: "Vad vill du beställa?" },
+  liveLocationBanner: { EN: "📍 Today's Location: Kista Science Tower (11:00 - 14:00)", SV: "📍 Dagens Plats: Kista Science Tower (11:00 - 14:00)" },
+  menuTitle: { EN: "Our Menu", SV: "Vår Meny" },
+  menuSubtitle: { EN: "Authentic Pakistani Street Food", SV: "Autentisk Pakistansk Streetfood" },
+  menuItem1Title: { EN: "Classic Paratha Roll", SV: "Klassisk Paratha Rulle" },
+  menuItem1Desc: { EN: "Crispy, flaky paratha bread filled with spiced chicken tikka, fresh coriander, and mint yogurt.", SV: "Frasigt parathabröd fyllt med kryddig kyckling tikka, färsk koriander och myntayoghurt." },
+  menuItem2Title: { EN: "Paneer Paratha Roll", SV: "Paneer Paratha Rulle" },
+  menuItem2Desc: { EN: "Vegetarian delight with grilled paneer cheese, pickled onions, and tamarind chutney.", SV: "Vegetarisk dröm med grillad paneer, picklad lök och tamarindchutney." },
+  menuItem3Title: { EN: "Beef Seekh Kebab Roll", SV: "Nötkött Seekh Kebab Rulle" },
+  menuItem3Desc: { EN: "Juicy minced beef kebabs cooked over open flame, wrapped in paratha with spicy green chutney.", SV: "Saftiga nötfärs-spett grillade över öppen eld, serveras i paratha med stark grön chutney." }
 };
 
 interface LanguageContextType {
