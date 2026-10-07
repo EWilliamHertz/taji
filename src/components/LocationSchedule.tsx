@@ -35,7 +35,7 @@ export function LocationSchedule({ scheduleData }: { scheduleData: any[] }) {
         <div className="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-black/20 before:to-transparent">
           {activeDays.length === 0 && (
             <div className="text-center text-black font-bold uppercase p-8 bg-black/10 rounded-2xl">
-              No schedule available yet. Check back soon!
+              {t("noSchedule")}
             </div>
           )}
           {activeDays.map((item, index) => (

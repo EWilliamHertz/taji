@@ -96,7 +96,8 @@ export const translations: Translations = {
   menuItem2Title: { EN: "Paneer Paratha Roll", SV: "Paneer Paratha Rulle" },
   menuItem2Desc: { EN: "Vegetarian delight with grilled paneer cheese, pickled onions, and tamarind chutney.", SV: "Vegetarisk dröm med grillad paneer, picklad lök och tamarindchutney." },
   menuItem3Title: { EN: "Beef Seekh Kebab Roll", SV: "Nötkött Seekh Kebab Rulle" },
-  menuItem3Desc: { EN: "Juicy minced beef kebabs cooked over open flame, wrapped in paratha with spicy green chutney.", SV: "Saftiga nötfärs-spett grillade över öppen eld, serveras i paratha med stark grön chutney." }
+  menuItem3Desc: { EN: "Juicy minced beef kebabs cooked over open flame, wrapped in paratha with spicy green chutney.", SV: "Saftiga nötfärs-spett grillade över öppen eld, serveras i paratha med stark grön chutney." },
+  noSchedule: { EN: "No schedule available yet. Check back soon!", SV: "Inget schema tillgängligt ännu. Kom tillbaka snart!" }
 };
 
 interface LanguageContextType {
