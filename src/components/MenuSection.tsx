@@ -4,35 +4,8 @@ import { motion } from "framer-motion";
 import { useLanguage } from "./LanguageContext";
 import Image from "next/image";
 
-export function MenuSection() {
-  const { t } = useLanguage();
-
-  const menuItems = [
-    {
-      id: 1,
-      titleKey: "menuItem1Title" as const,
-      descKey: "menuItem1Desc" as const,
-      price: "120 SEK",
-      image: "/images/4A38A39A-706D-49AE-ABF7-D70049EE1267.png",
-      tags: ["Halal"]
-    },
-    {
-      id: 2,
-      titleKey: "menuItem2Title" as const,
-      descKey: "menuItem2Desc" as const,
-      price: "110 SEK",
-      image: "/images/1C0283B2-0087-4BE7-85C5-7D36736639D1.png",
-      tags: ["Vegetarian", "Halal"]
-    },
-    {
-      id: 3,
-      titleKey: "menuItem3Title" as const,
-      descKey: "menuItem3Desc" as const,
-      price: "130 SEK",
-      image: "/images/1358419A-7A06-49C1-A4B6-4C73E776ED16.png",
-      tags: ["Spicy", "Halal"]
-    }
-  ];
+export function MenuSection({ menuItems }: { menuItems: any[] }) {
+  const { t, lang } = useLanguage();
 
   return (
     <section id="menu" className="py-24 bg-[#09090b] relative">
@@ -58,43 +31,54 @@ export function MenuSection() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {menuItems.map((item, i) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-[#111] border border-white/5 rounded-2xl overflow-hidden hover:border-yellow-400/50 transition-colors group"
-            >
-              <div className="relative h-64 w-full overflow-hidden">
-                <Image 
-                  src={item.image}
-                  alt={t(item.titleKey)}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-bold text-white uppercase tracking-wide">
-                    {t(item.titleKey)}
-                  </h3>
-                  <span className="text-yellow-400 font-black">{item.price}</span>
+          {menuItems.map((item, i) => {
+            const title = lang === "SV" ? item.title_sv : item.title_en;
+            const desc = lang === "SV" ? item.desc_sv : item.desc_en;
+            const tags = item.tags ? item.tags.split(',') : [];
+
+            return (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className={`bg-[#111] border border-white/5 rounded-2xl overflow-hidden transition-colors group relative ${item.is_sold_out ? 'opacity-70 grayscale' : 'hover:border-yellow-400/50'}`}
+              >
+                <div className="relative h-64 w-full overflow-hidden">
+                  <Image 
+                    src={item.image}
+                    alt={title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {item.is_sold_out && (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                      <span className="bg-red-600 text-white font-black px-4 py-2 rounded uppercase tracking-widest rotate-[-10deg] text-xl border-2 border-red-500">Sold Out</span>
+                    </div>
+                  )}
                 </div>
-                <p className="text-white/60 mb-6 text-sm leading-relaxed">
-                  {t(item.descKey)}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {item.tags.map(tag => (
-                    <span key={tag} className="bg-white/10 text-white/80 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                      {tag}
-                    </span>
-                  ))}
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className="text-xl font-bold text-white uppercase tracking-wide">
+                      {title}
+                    </h3>
+                    <span className="text-yellow-400 font-black">{item.price}</span>
+                  </div>
+                  <p className="text-white/60 mb-6 text-sm leading-relaxed">
+                    {desc}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {tags.map((tag: string) => (
+                      <span key={tag} className="bg-white/10 text-white/80 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        {tag.trim()}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

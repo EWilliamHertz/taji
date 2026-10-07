@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { loginAdmin, logoutAdmin, getAdminBookings, updateBookingStatus, getSchedule, updateSchedule } from "@/app/actions";
+import { loginAdmin, logoutAdmin, getAdminBookings, updateBookingStatus, getSchedule, updateSchedule, getMenuItems, getSubscribers, toggleMenuItemSoldOut } from "@/app/actions";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -10,6 +10,8 @@ export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolea
   const [password, setPassword] = useState("");
   const [bookings, setBookings] = useState<any[]>([]);
   const [schedule, setSchedule] = useState<any[]>([]);
+  const [menuItems, setMenuItems] = useState<any[]>([]);
+  const [subscribers, setSubscribers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,6 +29,10 @@ export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolea
     } else {
       setSchedule(s);
     }
+    const m = await getMenuItems();
+    setMenuItems(m);
+    const subs = await getSubscribers();
+    setSubscribers(subs);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -188,6 +194,48 @@ export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolea
               )}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="bg-[#111] p-6 rounded-xl border border-white/10">
+        <h2 className="text-2xl font-bold mb-6 text-yellow-400">Menu Management</h2>
+        <div className="grid gap-4">
+          {menuItems.map(item => (
+            <div key={item.id} className="flex justify-between items-center bg-white/5 p-4 rounded-lg">
+              <div>
+                <div className="font-bold text-lg">{item.title_en}</div>
+                <div className="text-sm text-white/50">{item.price} • {item.tags}</div>
+              </div>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <span className="text-sm font-bold">Sold Out?</span>
+                <input 
+                  type="checkbox" 
+                  checked={item.is_sold_out} 
+                  onChange={async (e) => {
+                    await toggleMenuItemSoldOut(item.id, e.target.checked);
+                    fetchData();
+                  }}
+                  className="w-5 h-5 accent-red-500"
+                />
+              </label>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-[#111] p-6 rounded-xl border border-white/10">
+        <h2 className="text-2xl font-bold mb-6 text-yellow-400">Newsletter Subscribers</h2>
+        <div className="bg-white/5 p-4 rounded-lg">
+          <div className="font-bold mb-4">Total Subscribers: {subscribers.length}</div>
+          <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
+            {subscribers.map(sub => (
+              <div key={sub.id} className="flex justify-between border-b border-white/10 pb-2">
+                <span>{sub.email}</span>
+                <span className="text-white/50 text-sm">{new Date(sub.created_at).toLocaleDateString()}</span>
+              </div>
+            ))}
+            {subscribers.length === 0 && <div className="text-white/50">No subscribers yet.</div>}
+          </div>
         </div>
       </section>
     </div>

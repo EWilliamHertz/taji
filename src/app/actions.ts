@@ -87,3 +87,37 @@ export async function updateSchedule(schedule: any[]) {
   revalidatePath("/admin");
 }
 
+export async function getMenuItems() {
+  const result = await query("SELECT * FROM menu_items ORDER BY id ASC");
+  return result.rows;
+}
+
+export async function toggleMenuItemSoldOut(id: number, is_sold_out: boolean) {
+  if (!(await checkAdmin())) throw new Error("Unauthorized");
+  await query("UPDATE menu_items SET is_sold_out = $1 WHERE id = $2", [is_sold_out, id]);
+  revalidatePath("/");
+  revalidatePath("/admin");
+}
+
+export async function getReviews() {
+  const result = await query("SELECT * FROM reviews ORDER BY id DESC");
+  return result.rows;
+}
+
+export async function subscribeNewsletter(formData: FormData) {
+  const email = formData.get("email") as string;
+  if (!email) throw new Error("Email required");
+  try {
+    await query("INSERT INTO subscribers (email) VALUES ($1)", [email]);
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: "Already subscribed or invalid email" };
+  }
+}
+
+export async function getSubscribers() {
+  if (!(await checkAdmin())) throw new Error("Unauthorized");
+  const result = await query("SELECT * FROM subscribers ORDER BY created_at DESC");
+  return result.rows;
+}
+
