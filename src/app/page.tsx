@@ -18,6 +18,7 @@ export default async function Home() {
   let fullSchedule: any[] = [];
   let menuItems: any[] = [];
   let reviews: any[] = [];
+  let instagramPosts: any[] = [];
 
   try {
     const scheduleRes = await query("SELECT * FROM weekly_schedule ORDER BY id ASC");
@@ -66,6 +67,46 @@ export default async function Home() {
     console.error("Error fetching data:", e);
   }
 
+  // Fetch Google Reviews
+  try {
+    const googleApiKey = process.env.GOOGLE_PLACES_API_KEY;
+    const placeId = process.env.GOOGLE_PLACE_ID;
+    
+    if (googleApiKey && placeId) {
+      const googleRes = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews&key=${googleApiKey}`, { next: { revalidate: 3600 } });
+      if (googleRes.ok) {
+        const googleData = await googleRes.json();
+        if (googleData.result && googleData.result.reviews) {
+          // Replace DB reviews with real Google Reviews
+          reviews = googleData.result.reviews.map((r: any, idx: number) => ({
+            id: idx,
+            author: r.author_name,
+            rating: r.rating,
+            // We use the same text for both languages since Google returns the review as-is
+            content_en: r.text,
+            content_sv: r.text, 
+          }));
+        }
+      }
+    }
+  } catch(e) {
+    console.error("Error fetching Google Reviews:", e);
+  }
+
+  // Fetch Instagram Posts
+  try {
+    const igToken = process.env.INSTAGRAM_ACCESS_TOKEN;
+    if (igToken) {
+      const igRes = await fetch(`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp&access_token=${igToken}`, { next: { revalidate: 3600 } });
+      if (igRes.ok) {
+        const igData = await igRes.json();
+        instagramPosts = igData.data || [];
+      }
+    }
+  } catch(e) {
+    console.error("Error fetching Instagram posts:", e);
+  }
+
   return (
     <LanguageProvider>
       <main className="min-h-screen bg-zinc-950 text-white font-sans selection:bg-yellow-400 selection:text-black">
@@ -75,7 +116,7 @@ export default async function Home() {
         <MenuSection menuItems={menuItems} />
         <ReviewsCarousel reviews={reviews} />
         <CateringBooking />
-        <Gallery />
+        <Gallery posts={instagramPosts} />
         <LocationSchedule scheduleData={fullSchedule} />
         <Footer />
       </main>

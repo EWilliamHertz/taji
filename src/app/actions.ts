@@ -16,19 +16,22 @@ export async function getBookings() {
 export async function createBooking(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
+  const phone = formData.get("phone") as string;
   const date = formData.get("date") as string;
   const time = formData.get("time") as string;
   const guests = parseInt(formData.get("guests") as string, 10) || 1;
   const type = (formData.get("type") as string) || "catering";
   const details = (formData.get("details") as string) || "";
 
-  if (!name || !email || !date || !time) {
+  if (!name || !email || !phone || !date || !time) {
     throw new Error("Missing required fields");
   }
 
+  const fullDetails = `Phone: ${phone}\n\n${details}`;
+
   await query(
     "INSERT INTO bookings (name, email, date, time, guests, type, details, status) VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending')",
-    [name, email, date, time, guests, type, details]
+    [name, email, date, time, guests, type, fullDetails]
   );
   
   revalidatePath("/");

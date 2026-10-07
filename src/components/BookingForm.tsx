@@ -142,6 +142,10 @@ export function BookingForm() {
             <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formEmail")}</label>
             <input required name="email" type="email" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors" placeholder={t("formEmailPlaceholder")} />
           </div>
+          <div>
+            <label className="block text-sm font-bold text-white/70 mb-2 uppercase tracking-wider">{t("formPhone")}</label>
+            <input required name="phone" type="tel" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-400 transition-colors" placeholder={t("formPhonePlaceholder")} />
+          </div>
           
           {activeTab === "catering" && (
             <div>

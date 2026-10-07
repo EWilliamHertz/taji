@@ -2,10 +2,19 @@
 
 import { motion } from "framer-motion";
 import { useLanguage } from "./LanguageContext";
-import { mockGalleryData } from "@/data/mockGallery";
 import { Camera } from "lucide-react";
+import { mockGalleryData } from "@/data/mockGallery";
 
-export function Gallery() {
+export interface InstagramPost {
+  id: string;
+  media_url: string;
+  thumbnail_url?: string;
+  caption?: string;
+  permalink: string;
+  media_type: string;
+}
+
+export function Gallery({ posts }: { posts?: InstagramPost[] }) {
   const { t } = useLanguage();
 
   return (
@@ -40,7 +49,50 @@ export function Gallery() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-          {mockGalleryData.map((item, index) => (
+          {posts && posts.length > 0 ? posts.slice(0, 6).map((post, index) => (
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 50, rotate: index % 2 === 0 ? -5 : 5 }}
+              whileInView={{ opacity: 1, y: 0, rotate: index % 2 === 0 ? -2 : 2 }}
+              whileHover={{ scale: 1.05, rotate: 0, zIndex: 20 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 200, 
+                damping: 20,
+                delay: index * 0.1 
+              }}
+              className="bg-white p-4 pb-16 md:pb-20 rounded-lg shadow-2xl relative group transform-gpu cursor-pointer"
+              onClick={() => window.open(post.permalink, '_blank')}
+            >
+              <div className="relative aspect-square overflow-hidden rounded shadow-inner">
+                <img 
+                  src={post.media_type === "VIDEO" ? (post.thumbnail_url || post.media_url) : post.media_url} 
+                  alt={post.caption || "Instagram post"}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                
+                {/* Caption Overlay */}
+                {post.caption && (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    className="absolute inset-0 bg-black/70 p-6 flex flex-col items-center justify-center text-center backdrop-blur-sm overflow-hidden"
+                  >
+                    <p className="text-white font-medium text-sm md:text-base leading-relaxed font-mono line-clamp-4">
+                      {post.caption}
+                    </p>
+                  </motion.div>
+                )}
+              </div>
+              
+              <div className="absolute bottom-4 left-0 w-full px-4 text-center">
+                <span className="font-handwriting text-zinc-800 text-xl md:text-2xl opacity-80 hover:text-pink-600 transition-colors">
+                  @tajifoodtruck
+                </span>
+              </div>
+            </motion.div>
+          )) : mockGalleryData.map((item, index) => (
             <motion.div
               key={item.Filename}
               initial={{ opacity: 0, y: 50, rotate: index % 2 === 0 ? -5 : 5 }}
