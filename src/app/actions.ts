@@ -35,7 +35,6 @@ export async function createBooking(formData: FormData) {
   return { success: true };
 }
 
-import { cookies } from "next/headers";
 
 export async function loginAdmin(password: string) {
   if (password === process.env.ADMIN_PASSWORD) {
