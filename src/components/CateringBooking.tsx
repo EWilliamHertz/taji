@@ -29,8 +29,12 @@ export function CateringBooking() {
           </p>
           
           <a
-            href="mailto:hello@taji.se"
+            href="#booking-form"
             className="inline-flex items-center justify-center px-8 py-4 bg-yellow-400 text-black font-bold uppercase tracking-wider rounded-full hover:scale-105 transition-transform shadow-[0_0_30px_rgba(250,204,21,0.3)] mb-12"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' });
+            }}
           >
             {t("cateringCta")}
           </a>

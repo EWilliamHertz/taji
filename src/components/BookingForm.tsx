@@ -58,7 +58,7 @@ export function BookingForm() {
   };
 
   return (
-    <div className="bg-[#111] p-8 rounded-2xl shadow-2xl border border-white/5 w-full max-w-4xl mx-auto mt-12 text-left">
+    <div id="booking-form" className="bg-[#111] p-8 rounded-2xl shadow-2xl border border-white/5 w-full max-w-4xl mx-auto mt-12 text-left scroll-mt-24">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <h3 className="text-3xl font-black uppercase text-white">
           {t("bookingFormTitle")}
