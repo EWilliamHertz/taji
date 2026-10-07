@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 
-export function Navigation({ locationText }: { locationText?: string }) {
+export function Navigation({ locationData }: { locationData?: { type: string, text: string } | null }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { lang, setLang, t } = useLanguage();
@@ -30,7 +30,19 @@ export function Navigation({ locationText }: { locationText?: string }) {
   ];
 
   const langs: ("EN" | "SV")[] = ["EN", "SV"];
-  const prefix = lang === "SV" ? "📍 Dagens Plats:" : "📍 Today's Location:";
+  
+  const getPrefix = () => {
+    if (!locationData) return "";
+    if (locationData.type === "today") {
+      return lang === "SV" ? "📍 Dagens Plats:" : "📍 Today's Location:";
+    } else if (locationData.type === "tomorrow") {
+      return lang === "SV" ? "📍 Imorgon:" : "📍 Tomorrow:";
+    } else {
+      return lang === "SV" ? "📍 Nästa Plats:" : "📍 Next Location:";
+    }
+  };
+
+  const prefix = getPrefix();
 
   return (
     <motion.nav
@@ -42,10 +54,10 @@ export function Navigation({ locationText }: { locationText?: string }) {
         scrolled ? "bg-black/90 backdrop-blur-md shadow-lg" : "bg-transparent"
       )}
     >
-      {locationText && (
+      {locationData && (
         <div className="bg-yellow-400 text-black py-2 px-4 text-center text-sm sm:text-base font-bold tracking-wide">
           <a href="#location" className="hover:underline flex items-center justify-center gap-2">
-            {prefix} {locationText}
+            {prefix} {locationData.text}
           </a>
         </div>
       )}
