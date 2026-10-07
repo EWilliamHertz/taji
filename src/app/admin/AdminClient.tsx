@@ -5,6 +5,8 @@ import { loginAdmin, logoutAdmin, getAdminBookings, updateBookingStatus, getSche
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
+import Link from "next/link";
+
 export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolean }) {
   const [isAdmin, setIsAdmin] = useState(initialIsAdmin);
   const [password, setPassword] = useState("");
@@ -110,7 +112,10 @@ export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolea
     <div className="space-y-12 pb-24">
       <div className="flex justify-between items-center bg-[#111] p-4 rounded-xl border border-white/10">
         <h2 className="text-xl font-bold">Welcome, Admin</h2>
-        <button onClick={handleLogout} className="text-red-400 hover:text-red-300 font-bold">Logout</button>
+        <div className="flex items-center gap-4">
+          <Link href="/" className="text-white hover:text-yellow-400 font-bold bg-white/10 hover:bg-white/20 px-4 py-2 rounded transition-colors text-sm">View Website</Link>
+          <button onClick={handleLogout} className="text-red-400 hover:text-red-300 font-bold px-4 py-2 text-sm">Logout</button>
+        </div>
       </div>
 
       <section className="bg-[#111] p-6 rounded-xl border border-white/10">
