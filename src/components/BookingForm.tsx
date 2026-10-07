@@ -7,6 +7,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { createBooking, getBookings } from "@/app/actions";
 import { useLanguage } from "./LanguageContext";
+import { Loader2 } from "lucide-react";
 
 const availableTimes = ["12:00", "13:00", "14:00", "15:00", "18:00", "19:00", "20:00"];
 
@@ -162,8 +163,9 @@ export function BookingForm() {
           <button 
             type="submit" 
             disabled={!selectedDate || !selectedTime || isSubmitting}
-            className="w-full bg-yellow-400 text-black font-black uppercase tracking-widest py-4 rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:hover:scale-100 mt-2"
+            className="flex items-center justify-center w-full bg-yellow-400 text-black font-black uppercase tracking-widest py-4 rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:hover:scale-100 mt-2"
           >
+            {isSubmitting && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
             {isSubmitting ? t("formProcessing") : t("formSubmit")}
           </button>
         </div>
