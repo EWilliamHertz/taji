@@ -22,7 +22,7 @@ export default async function Home() {
 
     const todayRow = fullSchedule.find(r => r.day_of_week === today);
     if (todayRow && todayRow.is_active && todayRow.location_name) {
-      locationText = \`\${todayRow.location_name} (\${todayRow.time_range})\`;
+      locationText = `${todayRow.location_name} (${todayRow.time_range})`;
     }
   } catch (e) {
     console.error("Error fetching schedule:", e);

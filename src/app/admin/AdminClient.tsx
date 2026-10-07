@@ -163,11 +163,11 @@ export default function AdminClient({ initialIsAdmin }: { initialIsAdmin: boolea
                   </td>
                   <td className="p-3 text-sm max-w-xs truncate" title={b.details}>{b.details || '-'}</td>
                   <td className="p-3">
-                    <span className={\`px-2 py-1 rounded text-xs font-bold \${
+                    <span className={`px-2 py-1 rounded text-xs font-bold ${
                       b.status === 'pending' ? 'bg-yellow-400/20 text-yellow-400' :
                       b.status === 'approved' ? 'bg-green-400/20 text-green-400' :
                       'bg-red-400/20 text-red-400'
-                    }\`}>
+                    }`}>
                       {b.status}
                     </span>
                   </td>
