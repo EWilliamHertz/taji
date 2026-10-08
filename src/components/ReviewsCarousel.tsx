@@ -1,8 +1,54 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "./LanguageContext";
 import { Star } from "lucide-react";
+import Link from "next/link";
+
+export function ReviewCard({ review, index, lang, isGrid = false }: { review: any; index: number; lang: string; isGrid?: boolean }) {
+  const [expanded, setExpanded] = useState(false);
+  const content = lang === "SV" ? review.content_sv : review.content_en;
+  
+  // Truncate logic
+  const isLong = content.length > 150;
+  const displayContent = expanded ? content : (isLong ? content.substring(0, 150) + "..." : content);
+
+  const widthClass = isGrid ? "w-full" : "w-[300px] md:w-[380px]";
+
+  return (
+    <motion.div
+      key={review.id}
+      initial={{ opacity: 0, x: 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+      className={`${widthClass} snap-center bg-black border border-white/10 p-6 rounded-2xl flex-shrink-0 flex flex-col`}
+    >
+      <div className="flex gap-1 mb-4">
+        {Array.from({ length: review.rating }).map((_, j) => (
+          <Star key={j} className="text-yellow-400 fill-yellow-400" size={16} />
+        ))}
+      </div>
+      <p className="text-white/80 italic mb-4 text-base whitespace-pre-wrap flex-grow">
+        "{displayContent}"
+      </p>
+      {isLong && (
+        <button 
+          onClick={() => setExpanded(!expanded)}
+          className="text-yellow-400 text-sm font-bold uppercase tracking-wider text-left mb-6 hover:text-yellow-300 transition-colors"
+        >
+          {expanded 
+            ? (lang === "SV" ? "Visa mindre" : "Show less") 
+            : (lang === "SV" ? "... vill du läsa mer?" : "Read it all")}
+        </button>
+      )}
+      <div className="font-bold text-yellow-400 uppercase tracking-wider text-sm mt-auto">
+        — {review.author}
+      </div>
+    </motion.div>
+  );
+}
 
 export function ReviewsCarousel({ reviews }: { reviews: any[] }) {
   const { lang } = useLanguage();
@@ -26,30 +72,16 @@ export function ReviewsCarousel({ reviews }: { reviews: any[] }) {
           </div>
         </div>
 
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scrollbar-hide">
-          {reviews.map((review, i) => {
-            const content = lang === "SV" ? review.content_sv : review.content_en;
-            return (
-              <motion.div
-                key={review.id}
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="min-w-[300px] md:min-w-[400px] snap-center bg-black border border-white/10 p-8 rounded-2xl flex-shrink-0"
-              >
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: review.rating }).map((_, j) => (
-                    <Star key={j} className="text-yellow-400 fill-yellow-400" size={16} />
-                  ))}
-                </div>
-                <p className="text-white/80 italic mb-6 text-lg">"{content}"</p>
-                <div className="font-bold text-yellow-400 uppercase tracking-wider text-sm">
-                  — {review.author}
-                </div>
-              </motion.div>
-            );
-          })}
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 scrollbar-hide">
+          {reviews.map((review, i) => (
+            <ReviewCard key={review.id} review={review} index={i} lang={lang} />
+          ))}
+        </div>
+        
+        <div className="text-center mt-2 mb-8 text-white/50 text-sm animate-pulse flex items-center justify-center gap-2">
+          <span>←</span>
+          {lang === "SV" ? "Skrolla för att läsa mer" : "Scroll to discover more"}
+          <span>→</span>
         </div>
 
         <motion.div 
@@ -58,6 +90,15 @@ export function ReviewsCarousel({ reviews }: { reviews: any[] }) {
           viewport={{ once: true }}
           className="mt-12 text-center"
         >
+          <div className="mb-12">
+            <Link 
+              href="/reviews"
+              className="inline-block bg-zinc-800 text-white px-8 py-3 rounded-full font-black uppercase tracking-wider hover:bg-zinc-700 transition-colors"
+            >
+              {lang === "SV" ? "Läs alla recensioner" : "Read all reviews"}
+            </Link>
+          </div>
+
           <p className="text-white/60 mb-6 font-bold uppercase tracking-widest text-sm">
             {lang === "SV" ? "Läs fler recensioner & Beställ via" : "Read more reviews & Order on"}
           </p>

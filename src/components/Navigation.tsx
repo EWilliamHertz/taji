@@ -5,12 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "./LanguageContext";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 
 export function Navigation({ locationData }: { locationData?: { type: string, text: string } | null }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { lang, setLang, t } = useLanguage();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,13 +22,16 @@ export function Navigation({ locationData }: { locationData?: { type: string, te
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const isHome = pathname === "/";
+  const getHref = (hash: string) => isHome ? hash : `/${hash}`;
+
   const navLinks = [
-    { name: t("navHome"), href: "#home" },
-    { name: t("navStory"), href: "#story" },
-    { name: t("menuTitle"), href: "#menu" },
-    { name: t("navCatering"), href: "#catering" },
-    { name: t("navGallery"), href: "#gallery" },
-    { name: t("navLocation"), href: "#location" },
+    { name: t("navHome"), href: getHref("#home") },
+    { name: t("navStory"), href: getHref("#story") },
+    { name: t("menuTitle"), href: getHref("#menu") },
+    { name: t("navCatering"), href: getHref("#catering") },
+    { name: t("navGallery"), href: getHref("#gallery") },
+    { name: t("navLocation"), href: getHref("#location") },
   ];
 
   const langs: ("EN" | "SV")[] = ["EN", "SV"];
@@ -56,7 +61,7 @@ export function Navigation({ locationData }: { locationData?: { type: string, te
     >
       {locationData && (
         <div className="bg-yellow-400 text-black py-2 px-4 text-center text-sm sm:text-base font-bold tracking-wide">
-          <a href="#location" className="hover:underline flex items-center justify-center gap-2">
+          <a href={getHref("#location")} className="hover:underline flex items-center justify-center gap-2">
             {prefix} {locationData.text}
           </a>
         </div>
@@ -65,7 +70,7 @@ export function Navigation({ locationData }: { locationData?: { type: string, te
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo */}
         <motion.a
-          href="#home"
+          href={getHref("#home")}
           className="text-white hover:text-yellow-400 transition-colors w-24"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

@@ -73,25 +73,30 @@ export default async function Home() {
     const placeId = process.env.GOOGLE_PLACE_ID;
     
     if (googleApiKey && placeId) {
-      const googleRes = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews&key=${googleApiKey}`, { next: { revalidate: 3600 } });
+      const googleRes = await fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=reviews&key=${googleApiKey}`, { next: { revalidate: 3600 } });
       if (googleRes.ok) {
         const googleData = await googleRes.json();
-        if (googleData.result && googleData.result.reviews) {
-          // Replace DB reviews with real Google Reviews
-          reviews = googleData.result.reviews.map((r: any, idx: number) => ({
-            id: idx,
-            author: r.author_name,
+        if (googleData.reviews) {
+          const googleReviews = googleData.reviews.map((r: any, idx: number) => ({
+            id: `google-${idx}`,
+            author: r.authorAttribution?.displayName || "Anonymous",
             rating: r.rating,
             // We use the same text for both languages since Google returns the review as-is
-            content_en: r.text,
-            content_sv: r.text, 
+            content_en: r.text?.text || "",
+            content_sv: r.text?.text || "", 
           }));
+          const googleAuthors = new Set(googleReviews.map((r: any) => r.author));
+          const filteredDbReviews = reviews.filter(r => !googleAuthors.has(r.author));
+          reviews = [...googleReviews, ...filteredDbReviews];
         }
       }
     }
   } catch(e) {
     console.error("Error fetching Google Reviews:", e);
   }
+
+  // Shuffle and pick up to 16 reviews for the front page
+  const shuffledReviews = [...reviews].sort(() => 0.5 - Math.random()).slice(0, 16);
 
   // Fetch Instagram Posts
   try {
@@ -114,7 +119,7 @@ export default async function Home() {
         <Hero />
         <Story />
         <MenuSection menuItems={menuItems} />
-        <ReviewsCarousel reviews={reviews} />
+        <ReviewsCarousel reviews={shuffledReviews} />
         <CateringBooking />
         <Gallery posts={instagramPosts} />
         <LocationSchedule scheduleData={fullSchedule} />
